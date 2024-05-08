@@ -73,29 +73,28 @@ About the **water-channel-controller** subsystem:
 
 About the **river-monitoring-service** subsystem:
 - this subsystem decides the overall policy and behavior of the river monitoring system, depending on the water level as measured
-  by the *water-level-monitoring* subsystem;
-- Policy:
+  by the *water-level-monitoring* subsystem, policy:
 - when the water level is in the range [WL1, WL2], then the system is considered in a NORMAL state. In the NORMAL state:
-    - the frequency to be used for monitoring the water level is F1
-    - the valve opening level should be 25%
-- when the water level is < WL1, the system is in an ALARM-TOO-LOW state. 
-    - in this state, the valve opening level should be 0%
-- when the water level is > WL2,  there are three further cases
-    - WL2 < water-level <= WL3 → the system is in a PRE-ALARM-TOO-HIGH state. 
-        - In this state, the frequency to be used for monitoring the water level should be increased to F2 (where F2 > F1)
-    - WL3 < water-level <= WL4 → ALARM-TOO-HIGH state 
-        - In this state the frequency is still F2, but the valve opening level must be 50%
-    - water-level > WL4 → ALARM-TOO-HIGH-CRITIC state
-        - In this state, the frequency is still F2, but the valve opening level should be 100%
+    - the frequency to be used for monitoring the water level is F1;
+    - the valve opening level should be 25%;
+- when the water level is < WL1, the system is in an ALARM-TOO-LOW state: 
+    - in this state, the valve opening level should be 0%;
+- when the water level is > WL2,  there are three further cases:
+    - WL2 < water-level <= WL3 → the system is in a PRE-ALARM-TOO-HIGH state:
+        - In this state, the frequency to be used for monitoring the water level should be increased to F2 (where F2 > F1);
+    - WL3 < water-level <= WL4 → ALARM-TOO-HIGH state:
+        - In this state the frequency is still F2, but the valve opening level must be 50%;
+    - water-level > WL4 → ALARM-TOO-HIGH-CRITIC state:
+        - In this state, the frequency is still F2, but the valve opening level should be 100%.
 
 About the **river-monitoring-dashboard** subsystem:
 - this subsystem has two main responsibilities:
     - to visualize the state of the River Monitoring system. In particular:
-        - the graph of water level trend, considering a certain temporal window (the last N minutes)
+        - the graph of water level trend, considering a certain temporal window (the last N minutes);
         - the state of the system:
-            - NORMAL, ALARM-TOO-LOW, PRE-ALARM-TOO-HIGH, ALARM-TOO-HIGH, ALARM-TOO-HIGH-CRITIC
-        - the valve opening level
-    - to allow a user for controlling manually, from remote, the valve opening level
+            - NORMAL, ALARM-TOO-LOW, PRE-ALARM-TOO-HIGH, ALARM-TOO-HIGH, ALARM-TOO-HIGH-CRITIC;
+        - the valve opening level;
+    - to allow a user for controlling manually, from remote, the valve opening level.
 
 ### Assignment Further Requirements
 
