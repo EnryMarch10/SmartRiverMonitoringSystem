@@ -7,13 +7,17 @@
 #include <Arduino.h>
 #include <assert.h>
 
-// #define __DEBUG__
+#define __DEBUG__
 
-#define TASK_BORN F("task born")
-#define TASK_INIT F("task init")
-#define TASK_DIE F("task die")
-#define TASK_STOP F("task stop")
-#define TASK_RESUME F("task resume")
+#define MIN_PERCENTAGE 0
+#define MID_PERCENTAGE 50
+#define MAX_PERCENTAGE 100
+
+// #define TASK_BORN F("task born")
+// #define TASK_INIT F("task init")
+// #define TASK_DIE F("task die")
+// #define TASK_STOP F("task stop")
+// #define TASK_RESUME F("task resume")
 
 #define PREFIX_LOG F("log> ")
 #ifdef __DEBUG__
@@ -34,16 +38,15 @@
 
 #define ABS_DIFF(x, y) ((x) > (y) ? (x) - (y) : (y) - (x))
 
+#define BAUD_RATE 9600
+
 template<class T>
-void swap(T &a, T &b)
-{
+void swap(T &a, T &b) {
     T tmp = a;
     a = b;
     b = tmp;
 }
 
 void my_assert(unsigned char e);
-
-#define BAUD_RATE 9600
 
 #endif
