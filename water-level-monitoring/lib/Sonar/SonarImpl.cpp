@@ -5,34 +5,29 @@
 /**
  * Retrieves speed of sound.
 */
-static void _init_vs(float *vs, float *tempOld, float tempNew)
-{
+static void _init_vs(float *vs, float *tempOld, float tempNew) {
     *tempOld = tempNew;
     *vs = 331.45 + 0.62 * (*tempOld);
 }
 
-void SonarImpl::ConfigPins(const int trigPin, const int echoPin)
-{
+void SonarImpl::ConfigPins(const int trigPin, const int echoPin) {
     this->trigPin = trigPin;
     this->echoPin = echoPin;
     pinMode(trigPin, OUTPUT);
     pinMode(echoPin, INPUT);
 }
 
-SonarImpl::SonarImpl(const int trigPin, const int echoPin)
-{
+SonarImpl::SonarImpl(const int trigPin, const int echoPin) {
     _init_vs(&vs, &(this->temperature), DEFAULT_TEMP);
     ConfigPins(trigPin, echoPin);
 }
 
-SonarImpl::SonarImpl(const int trigPin, const int echoPin, const float environmentTemperature)
-{
+SonarImpl::SonarImpl(const int trigPin, const int echoPin, const float environmentTemperature) {
     _init_vs(&vs, &temperature, environmentTemperature);
     ConfigPins(trigPin, echoPin);
 }
 
-float SonarImpl::getDistance(void)
-{
+float SonarImpl::getDistance(void) {
     digitalWrite(trigPin, LOW);
     delayMicroseconds(2);
     digitalWrite(trigPin, HIGH);
