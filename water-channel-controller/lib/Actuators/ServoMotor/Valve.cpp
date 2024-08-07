@@ -2,9 +2,12 @@
 
 #define DEF_PERCENTAGE MID_PERCENTAGE
 #define TOLERANCE 4 // percent
-#define STEP_SIZE 1 // percent
+#define STEP_SIZE 5 // percent
 
 void Valve::init(void) {
+#ifdef __DEBUG__
+    assert(STEP_SIZE > TOLERANCE);
+#endif
     percentage = DEF_PERCENTAGE;
 }
 

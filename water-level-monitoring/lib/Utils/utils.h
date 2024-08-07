@@ -6,6 +6,8 @@
 
 #include <Arduino.h>
 
+// #define __DEBUG__
+
 #define XOR_SWAP(X, Y)  {\
                             (X) ^= (Y);\
                             (Y) ^= (X);\

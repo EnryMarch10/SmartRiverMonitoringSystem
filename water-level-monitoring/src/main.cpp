@@ -20,7 +20,9 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
     const unsigned long newPeriod = strtoul(message, &end, 10);
     if (message != end && errno != ERANGE) {
         period = newPeriod;
+#ifdef __DEBUG__
         Serial.println(String("[MQTT_CALLBACK] New period ok: ") + period);
+#endif
     } else {
         Serial.println("[MQTT_CALLBACK] Message period format error");
     }
@@ -49,7 +51,9 @@ void loop() {
         if (water_level != sonar.getErrorDistance()) {
             /* creating a msg in the buffer */
             snprintf(msg, MSG_BUFFER_SIZE, "%f", water_level);
+#ifdef __DEBUG__
             Serial.println(String("[APP] Publishing message on topic `") + mqtt_topic_water_level + "`: " + msg + " at " + now / 1000.0 + " s");
+#endif
             mqtt_client.publish(mqtt_topic_water_level, msg);
         } else {
             Serial.println("[APP] Sonar unable to detect correct water level");

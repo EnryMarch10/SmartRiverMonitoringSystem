@@ -57,9 +57,11 @@ void wifi_setup(const char *ssid, const char *password) {
     // We start by connecting to a WiFi network
     // To debug, please enable Core Debug Level to Verbose
 
+#ifdef __DEBUG__
     Serial.println();
     Serial.print("[WiFi] Connecting to ");
     Serial.println(ssid);
+#endif
 
     WiFi.begin(ssid, password);
     // Auto reconnect is set true as default
@@ -82,9 +84,11 @@ void wifi_setup(const char *ssid, const char *password) {
             case WL_SCAN_COMPLETED: Serial.println("[WiFi] Scan is completed"); break;
             case WL_DISCONNECTED: Serial.println("[WiFi] WiFi is disconnected"); break;
             case WL_CONNECTED:
+#ifdef __DEBUG__
                 Serial.println("[WiFi] WiFi is connected!");
                 Serial.print("[WiFi] IP address: ");
                 Serial.println(WiFi.localIP());
+#endif
                 return;
                 break;
             default:
@@ -110,9 +114,13 @@ void mqtt_connect(void) {
         ledGreen.switchOff();
         ledRed.switchOn();
         String client_id = "WaterLevelMonitoring-" + String(random(LONG_MAX), HEX);
+#ifdef __DEBUG__
         Serial.printf("[MQTT] Connecting to MQTT Broker as %s\n", client_id.c_str());
+#endif
         if (mqtt_client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
+#ifdef __DEBUG__
             Serial.println("[MQTT] Connected to MQTT broker");
+#endif
             mqtt_client.subscribe(mqtt_topic_period);
         } else {
             Serial.print("[MQTT] Failed to connect to MQTT broker, rc=");

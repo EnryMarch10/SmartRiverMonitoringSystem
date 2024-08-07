@@ -124,7 +124,11 @@ void loop() {
         nextModality = remoteModality;
     }
 
-    if (nextPosition != lastPosition || nextModality != lastModality) {
+    static unsigned long lastMsgTime = 0;
+    static const long unsigned period = 500;
+    const unsigned long now = millis();
+    if (now - lastMsgTime > period && (nextPosition != lastPosition || nextModality != lastModality)) {
+        lastMsgTime = now;
         lastModality = nextModality;
         lastPosition = nextPosition;
         lcd.clear();
