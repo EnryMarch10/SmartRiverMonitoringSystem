@@ -86,7 +86,7 @@ void loop() {
                             MyLogger.logln(String(MID) + F(" OK new valve level set to ") + valvePercentage + F(" %"));
                         }
                     } else {
-                        Serial.println(String(MID) + F(" ERROR invalid percentage format (not a number)"));
+                        MyLogger.logln(String(MID) + F(" ERROR invalid percentage format (not a number)"));
                     }
                 } else {
                     MyLogger.logln(String(MID) + F(" ERROR invalid command"));
