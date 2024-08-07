@@ -19,10 +19,7 @@
 // #define TASK_STOP F("task stop")
 // #define TASK_RESUME F("task resume")
 
-#define PREFIX_LOG F("log> ")
-#ifdef __DEBUG__
-#define PREFIX_DEBUG F("debug> ")
-#endif
+#define BAUD_RATE 9600
 
 #define XOR_SWAP(X, Y)  {\
                             (X) ^= (Y);\
@@ -37,8 +34,6 @@
                             }
 
 #define ABS_DIFF(x, y) ((x) > (y) ? (x) - (y) : (y) - (x))
-
-#define BAUD_RATE 9600
 
 template<class T>
 void swap(T &a, T &b) {

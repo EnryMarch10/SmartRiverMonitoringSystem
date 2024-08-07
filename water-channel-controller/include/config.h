@@ -5,7 +5,7 @@
 #define __CONFIG__
 
 #include "utils.h"
-#include "Serial/Logger.h"
+#include "Serial/Console.h"
 
 // PINS configuration
 #define PIN_POTENTIOMETER A0

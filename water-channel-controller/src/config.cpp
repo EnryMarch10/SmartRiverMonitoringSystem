@@ -6,9 +6,6 @@
 #include "Potentiometer/Potentiometer.h"
 #include "ServoMotor/Valve.h"
 
-#define STRING_AUTOMATIC F("AUTOMATIC")
-#define STRING_MANUAL F("MANUAL")
-
 ButtonImpl button = ButtonImpl(PIN_BUTTON);
 LcdI2C lcd = LcdI2C(LCD_ADDRESS);
 Potentiometer potentiometer = Potentiometer(PIN_POTENTIOMETER, MIN_PERCENTAGE, MAX_PERCENTAGE);
@@ -32,7 +29,7 @@ void init_config(void)
     while(valve.readPosition() != DEFAULT_PULSE_WIDTH) {
         const unsigned long stop = millis();
         if (stop - start > VALVE_INIT_TIMEOUT) {
-            MyLogger.debugln(String(F("WARNING valve timeout occurred in initialization (")) + VALVE_INIT_TIMEOUT + F(" ms)"));
+            MyConsole.printlnWarning(String(F("Valve timeout occurred in initialization (")) + VALVE_INIT_TIMEOUT + F(" ms)"));
             break;
         }
     }

@@ -80,29 +80,29 @@ void loop() {
                     const int newPercentage = atoi(value);
                     if (errno == 0) {
                         if (newPercentage < MIN_PERCENTAGE || newPercentage > MAX_PERCENTAGE) {
-                            MyLogger.logln(String(MID) + F(" ERROR invalid percentage value"));
+                            MyConsole.logln(String(MID) + F(" ERROR invalid percentage value"));
                         } else {
                             valvePercentage = newPercentage;
-                            MyLogger.logln(String(MID) + F(" OK new valve level set to ") + valvePercentage + F(" %"));
+                            MyConsole.debugln(String(MID) + F(" OK new valve level set to ") + valvePercentage + F(" %"));
                         }
                     } else {
-                        MyLogger.logln(String(MID) + F(" ERROR invalid percentage format (not a number)"));
+                        MyConsole.logln(String(MID) + F(" ERROR invalid percentage format (not a number)"));
                     }
                 } else {
-                    MyLogger.logln(String(MID) + F(" ERROR invalid command"));
+                    MyConsole.logln(String(MID) + F(" ERROR invalid command"));
                 }
             } else {
-                MyLogger.logln(F("ERROR invalid message (correct format 'MID command value')"));
+                MyConsole.logln(F("ERROR invalid message (correct format 'MID command value')"));
             }
         } else {
-            MyLogger.logln(F("ERROR regex unmatched"));
+            MyConsole.logln(F("ERROR regex unmatched"));
         }
         delete msg;
     }
 
     if (modality == MANUAL) {
         valvePercentage = potentiometer.getValue();
-        // MyLogger.logln(String(F("Potentiometer percentage set to ")) + valvePercentage);
+        // MyConsole.logln(String(F("Potentiometer percentage set to ")) + valvePercentage);
     }
 
     valve.setPositionPercentage(valvePercentage);
@@ -111,7 +111,7 @@ void loop() {
     // while(valve.readPositionPercentage() != valvePercentage) {
     //     const unsigned long stop = millis();
     //     if (stop - start > VALVE_STEP_TIMEOUT) {
-    //         MyLogger.debugln(String(F("WARNING valve timeout occurred (")) + VALVE_STEP_TIMEOUT + F(" ms)"));
+    //         MyConsole.debugln(String(F("WARNING valve timeout occurred (")) + VALVE_STEP_TIMEOUT + F(" ms)"));
     //         break;
     //     }
     // }
