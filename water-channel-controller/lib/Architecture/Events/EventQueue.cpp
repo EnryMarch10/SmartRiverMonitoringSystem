@@ -1,7 +1,7 @@
 #include "EventQueue.h"
 
 EventQueue::EventQueue(void) {
-    queue = new MyQueue<Event *>();
+    queue = new Queue<Event *>();
 }
 
 bool EventQueue::isEmpty(void) {

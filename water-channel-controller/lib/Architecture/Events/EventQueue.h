@@ -3,7 +3,7 @@
 
 #include "utils.h"
 #include "Event.h"
-#include "MyQueue.h"
+#include "Queue/Queue.h"
 
 /**
  * Class representing an event queue.
@@ -18,7 +18,7 @@ public:
     ~EventQueue(void);
 
 private:
-    MyQueue<Event *> *queue;
+    Queue<Event *> *queue;
 
 };
 

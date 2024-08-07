@@ -4,15 +4,15 @@
 #include "utils.h"
 
 template<typename T>
-class MyQueue {
+class Queue {
 
 public:
-    MyQueue(void);
+    Queue(void);
     bool isEmpty(void);
     bool containsSomething(void);
     void enqueue(const T& obj);
     T dequeue(void);
-    ~MyQueue(void);
+    ~Queue(void);
 
 private:
     typedef struct Node {
@@ -27,6 +27,6 @@ private:
 
 };
 
-#include "MyQueue.cpp"
+#include "Queue.cpp"
 
 #endif // __QUEUE__H

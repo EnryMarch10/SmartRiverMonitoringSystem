@@ -1,16 +1,16 @@
 #ifndef __QUEUE__CPP
 #define __QUEUE__CPP
 
-#include "MyQueue.h"
+#include "Queue.h"
 
 template <typename T>
-MyQueue<T>::MyQueue(void) {
+Queue<T>::Queue(void) {
     n = 0;
     first = last = NULL;
 }
 
 template <typename T>
-bool MyQueue<T>::isEmpty(void) {
+bool Queue<T>::isEmpty(void) {
     if (first != NULL) {
         my_assert(n != 0);
         return false;
@@ -19,12 +19,12 @@ bool MyQueue<T>::isEmpty(void) {
 }
 
 template <typename T>
-bool MyQueue<T>::containsSomething(void) {
+bool Queue<T>::containsSomething(void) {
     return !isEmpty();
 }
 
 template <typename T>
-void MyQueue<T>::enqueue(const T& obj) {
+void Queue<T>::enqueue(const T& obj) {
     Node* tmp = NULL;
     tmp = (Node *) malloc(sizeof(*tmp));
     my_assert(tmp != NULL);
@@ -48,7 +48,7 @@ void MyQueue<T>::enqueue(const T& obj) {
 }
 
 template <typename T>
-T MyQueue<T>::dequeue(void) {
+T Queue<T>::dequeue(void) {
     T result;
     Node* tmp;
     my_assert(first != NULL);
@@ -75,7 +75,7 @@ T MyQueue<T>::dequeue(void) {
 }
 
 template <typename T>
-MyQueue<T>::~MyQueue(void) {
+Queue<T>::~Queue(void) {
     while (!isEmpty()) {
         dequeue();
     }
