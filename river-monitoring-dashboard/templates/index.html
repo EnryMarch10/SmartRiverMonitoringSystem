@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>River Monitoring Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="#">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css"/>
+    <script src="{{ url_for('static', filename='data.js')}}" type="text/javascript" ></script>
+    <script src="{{ url_for('static', filename='forms.js')}}" type="text/javascript" ></script>
+</head>
+<body>
+    <header>
+        <h1>River Monitoring Dashboard</h1>
+    </header>
+    <main>
+        <p class="connection" id="server-connection">Connection status: <span>UNKNOWN</span></p>
+        <p class="status" id="system-status">System Status: <span>{{ state }}</span></p>
+        <p class="graph-container">
+            <h2 id="my-chart-title">Water Level Trend (Last 0 data)</h2>
+            <canvas id="my-chart" width="400" height="200"></canvas>
+        </p>
+        <p class="valve-level" id="valve-level">Valve Opening Level (0 close, 100 open): <span>{{ valve_level }}</span></p>
+        <form id="mode-form" action="" method="">
+            <ul>
+                <li><p class="modality" id="system-modality">System Modality: <span>{{ session.modality }}</span></p></li>
+                <li><label for="toggle-mode" hidden>Toggle modality:</label><button id="toggle-mode" type="button" onclick="toggleModality()">Toggle</button></li>
+            </ul>
+        </form>
+        <form id="manual-form" action="" method="POST" onsubmit="submitValveLevel(event)">
+            <ul>
+                <li><label for="input-valve-level">Set Valve Level in %: </label><input id="input-valve-level" type="number" name="valve-level" min="0" max="100" value="50"></li>
+                <li><label for="set-valve-level" hidden>Login:</label><input id="set-valve-level" type="submit" name="set-valve-level" value="Set"/></li>
+            </ul>
+        </form>
+    </main>
+</body>
+</html>

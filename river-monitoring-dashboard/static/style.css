@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+body h1 {
+    text-align: center;
+}
+
+.connection {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.connection > span {
+    font-weight: bold;
+}
+
+.status, .modality {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.status > span, .modality > span {
+    font-weight: bold;
+}
+
+.graph-container {
+    margin-bottom: 20px;
+    width: 40%;
+}
+
+.valve-level {
+    margin-bottom: 20px;
+}
+
+body > main form {
+    border: black thin solid;
+    box-sizing: border-box;
+}
+
+body > main form:first-of-type {
+    margin-bottom: 10px;
+}
+
+body > main form label, body > main form input {
+    margin-bottom: 10px;
+}
+
+body > main form > ul {
+    list-style: none;
+}
+
+body > main form > ul > li {
+    margin: 5px;
+}
+
+body > main form > ul > li:not(:last-child) {
+    width: 100%;
+    text-align: left;
+}
+
+body > main form > ul > li:last-child {
+    text-align: right;
+    margin-top: 20px;
+}
