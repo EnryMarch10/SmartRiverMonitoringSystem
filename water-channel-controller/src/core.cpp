@@ -9,6 +9,7 @@
 #include "ServoMotor/Valve.h"
 
 #define LCD_MAX_REFRESH_RATE 500 // ms
+#define TIME_SERVER_UPDATE 5000 // ms
 
 extern ToggleModalityFSM *toggleModalityFSM;
 
@@ -65,16 +66,22 @@ static void _set_valve_level(void) {
 
 static void _update_display(void) {
     static unsigned long lastMsgTime = 0;
+    static unsigned long lastDisplayTime = 0;
 
     const int nextPosition = valve.readPositionPercentage();
     const String nextModality = modality == MANUAL ? MANUAL : remoteModality;
     const unsigned long now = millis();
-    if (now - lastMsgTime > LCD_MAX_REFRESH_RATE && (nextPosition != lastPosition || nextModality != lastModality)) {
-        lastMsgTime = now;
+    if (now - lastDisplayTime > LCD_MAX_REFRESH_RATE && (nextPosition != lastPosition || nextModality != lastModality)) {
+        lastDisplayTime = now;
         lastModality = nextModality;
         lastPosition = nextPosition;
         lcd.clear();
         lcd.write(nextModality + F(" - ") + nextPosition);
+    } else if (now - lastMsgTime > TIME_SERVER_UPDATE) {
+        lastMsgTime = now;
+        MyConsole.println(String(F("local mode ")) + modality);
+        MyConsole.println(String(F("mode ")) + remoteModality);
+        MyConsole.println(String(F("valve percentage ")) + lastPosition);
     }
 }
 
