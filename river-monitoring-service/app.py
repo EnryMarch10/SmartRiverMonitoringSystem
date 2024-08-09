@@ -20,11 +20,11 @@ def on_message(client, userdata, msg):
             if (data_policy.modality != data_policy.MODE_MANUAL): # MODALITY == AUTOMATIC
                 # Send new VL to Water-Channel-Controller if not in manual mode
                 newValveLevel = f"set valve percentage {data_policy.valve_level}"
-                if not arduino.send_data(newValveLevel):
+                result = arduino.send_data(newValveLevel)
+                if not result:
                     arduino.try_connect()
-                    if arduino.send_data(newValveLevel):
-                        print(f"[POLICY] Sent new valve percentage `{data_policy.valve_level}` % to Water-Channel-Controller")
-                else:
+                    result = arduino.send_data(newValveLevel)
+                if result:
                     print(f"[POLICY] Sent new valve percentage `{data_policy.valve_level}` % to Water-Channel-Controller")
                 # raise NotImplementedError()
         if (old_f != data_policy.period):
