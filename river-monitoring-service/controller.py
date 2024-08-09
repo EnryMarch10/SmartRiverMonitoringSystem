@@ -39,10 +39,13 @@ def _check_presence(arduino_port: str, event: threading.Event, interval=0.1):
                 previous_ports.clear()
         time.sleep(interval)
 
-class ArduinoController:
+class Controller:
     def __init__(self, port="", baud_rate=9600) -> None:
         self._connected = False
         self.try_connect(port, baud_rate)
+    
+    def is_connected(self):
+        return self._arduino_uno.is_open
 
     def try_connect(self, port="", baud_rate=9600) -> bool:
         if port == "":
@@ -63,29 +66,49 @@ class ArduinoController:
             self._port_controller.start()
             self._connected = True
             print(f"[ArduinoUnoController] Connected successfully at `{port}` port")
+            time.sleep(1)
             return True
         except Exception as e:
             print(f"[ArduinoUnoController] Failed to connect at `{port}` port with message: `{repr(e)}`", file=sys.stderr)
             self._connected = False
             return False
 
-    def send_data(self, message) -> bool:
+    def try_send_data(self, message) -> bool:
+        result = False
         try:
             self._arduino_uno.write(
                 str.encode(f"{str.encode("".join(random.choice(string.ascii_letters + string.digits) for _ in range(8)),
                                          encoding='ascii')} {str(message)}\n", encoding='ascii'))
             print(f"[ArduinoUnoController] Message sent: `{message}`")
-            return True
+            result = True
         except Exception as e:
             print(f"[ArduinoUnoController] Failed to send message with message: `{repr(e)}`", file=sys.stderr)
-            return False
+        finally:
+            return result
 
-    def receive_data(self) -> str | None:
+    def send_data(self, message) -> bool:
+        if not self.try_send_data(message):
+            if self.try_connect():
+                return self.try_send_data(message)
+        return False
+
+    def try_receive_data(self) -> str | None:
+        data = ""
         try:
-            return self._arduino_uno.readline().decode(encoding='ascii')
+            if self._arduino_uno.in_waiting > 0:
+                data = self._arduino_uno.readline().decode(encoding='ascii')
         except Exception as e:
             print(f"[ArduinoUnoController] Failed to receive message with message: `{repr(e)}`", file=sys.stderr)
-            return None
+            data = None
+        finally:
+            return data
+
+    def receive_data(self) -> str | None:
+        data = self.try_receive_data()
+        if data is None:
+            if self.try_connect():
+                return self.try_receive_data()
+        return data
 
     def close_connection(self) -> bool:
         try:
