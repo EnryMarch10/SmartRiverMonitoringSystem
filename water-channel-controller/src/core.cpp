@@ -48,7 +48,6 @@ static void _check_message(void) {
                     const int newPercentage = atoi(value);
                     if (errno == 0 && newPercentage >= MIN_PERCENTAGE && newPercentage <= MAX_PERCENTAGE) {
                         valvePercentage = newPercentage;
-                        MyConsole.debugln(String(MID) + F(" OK new valve level set to ") + valvePercentage + F(" %"));
                     }
                 }
             }
