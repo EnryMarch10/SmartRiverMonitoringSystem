@@ -15,8 +15,8 @@ PubSubClient mqtt_client(esp_client);
 
 // MQTT Broker settings
 static const char *mqtt_broker = "broker.emqx.io";
-static const char *mqtt_username = "SmartRiverMonitoringSystem";
-static const char *mqtt_password = "GtYu673Rt";
+// static const char *mqtt_username = "SmartRiverMonitoringSystem";
+// static const char *mqtt_password = "GtYu673Rt";
 static const int mqtt_port = 8883;
 
 const char *mqtt_topic_period = "SmartRiverMonitoringSystem/WaterLevelMonitoring/Period";
@@ -117,7 +117,7 @@ void mqtt_connect(void) {
 #ifdef __DEBUG__
         Serial.printf("[MQTT] Connecting to MQTT Broker as %s\n", client_id.c_str());
 #endif
-        if (mqtt_client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
+        if (mqtt_client.connect(client_id.c_str() /*, mqtt_username, mqtt_password */)) {
 #ifdef __DEBUG__
             Serial.println("[MQTT] Connected to MQTT broker");
 #endif
