@@ -7,8 +7,8 @@ def check_or_install_library(name):
     lib_location = subprocess.run([python_manager, "show", lib_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     # Installing missing library
-    if lib_location.returncode != 0:   
-        result = subprocess.run([python_manager, "install", lib_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    if lib_location.returncode != 0:
+        subprocess.run([python_manager, "install", lib_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         os.execl(sys.executable, sys.executable, *sys.argv)
 
     # Adding installed library to global PATH variable

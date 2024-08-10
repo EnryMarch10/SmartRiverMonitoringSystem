@@ -1,4 +1,4 @@
-import check_library
+import utils.check_library as check_library
 
 check_library.check_or_install_library("pyserial")
 
