@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const manualForm = document.getElementById('manual-form')
-    if (currentModeLabel.textContent === 'AUTOMATIC') {
-        currentModeLabel.textContent = 'MANUAL'
-        manualForm.style.display = 'block'
-    } else {
-        currentModeLabel.textContent = 'AUTOMATIC'
+    const currentModeLabel = document.getElementById('system-modality').children[0]
+    if (currentModeLabel.textContent == 'AUTOMATIC') {
         manualForm.style.display = 'none'
+    } else {
+        manualForm.style.display = 'block'
     }
 })
 

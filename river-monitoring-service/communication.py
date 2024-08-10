@@ -3,10 +3,12 @@ import sys, time, threading
 import monitor
 from controller import MyController
 from data import Data, MySharedData
+from datetime import datetime
+import dashboard
 
 def on_monitor_message(client, userdata, msg):
+    sampling_time = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
     water_level = float(msg.payload.decode())
-    # TODO: send new water level to River-Monitoring-Dashboard
     logging.info(f"[Water-Level-Monitoring] Received water level {water_level}")
 
     old_state = MySharedData.get_state()
@@ -15,16 +17,15 @@ def on_monitor_message(client, userdata, msg):
     MySharedData.set_data(water_level)
 
     state = MySharedData.get_state()
+    valve_level = MySharedData.get_valve_level()
+    MySharedData.set_dashboard_data(sampling_time, water_level, state, valve_level)
     if old_state != state:
         logging.info(f"[Policy] State changed to `{state}`")
-        # TODO: send new state to River-Monitoring-Dashboard
-        if old_vl != MySharedData.get_valve_level():
-            # Send new VL to Water-Channel-Controller if not in manual mode
+        if old_vl != valve_level:
             if (MySharedData.is_modality_automatic()):
                 MyController.send_valve_percentage()
         period = MySharedData.get_period()
         if old_T != period:
-            # Send new T to Water-Level-Monitoring
             monitor.publish(client, period)
             logging.info(f"[Water-Level-Monitoring] Sent new period `{period}`")
 
@@ -65,9 +66,9 @@ def _check_data():
             time.sleep(0.5)
 
 def start(host):
-    # TODO: host will be important for dashboard connection
     client = monitor.connect_mqtt(on_monitor_message)
     threading.Thread(target = _check_data, daemon=True).start()
+    dashboard.start(host)
     try:
         client.loop_forever()
     except KeyboardInterrupt:

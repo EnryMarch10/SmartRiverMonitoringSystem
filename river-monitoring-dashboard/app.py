@@ -1,5 +1,10 @@
+from utils.logging_config import setup_logging
+
+# Logger configuration has to be done before everything else
+setup_logging()
+
 import sys
-import check_library
+import utils.check_library as check_library
 
 check_library.check_or_install_library('Flask')
 check_library.check_or_install_library('Flask-Session')

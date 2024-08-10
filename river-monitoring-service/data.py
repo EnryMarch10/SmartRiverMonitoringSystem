@@ -8,6 +8,7 @@ class Data():
     _lock_valve_level = threading.Lock()
     _lock_period = threading.Lock()
     _lock_modality = threading.Lock()
+    _lock_dashboard_data = threading.Lock()
 
     # System modalities
     MODE_AUTOMATIC = "AUTOMATIC"
@@ -50,46 +51,54 @@ class Data():
         self._period = Data.T1
         self._remote_mode = Data.MODE_AUTOMATIC
         self._remote_address = ""
+        self._last_sampling_time = ""
+        self._last_water_level = -1
+        self._last_state = ""
+        self._last_valve_level = -1
 
     def get_state(self):
         with self._lock_state:
             return self._state
-    
+
     def get_valve_level(self):
         with self._lock_valve_level:
             return self._valve_level
-    
+
     def get_period(self):
         with self._lock_period:
             return self._period
-    
+
     def get_modality(self):
         with self._lock_modality:
             return self._remote_mode
-    
+
     def is_modality_automatic(self):
         with self._lock_modality:
             return self._remote_mode == Data.MODE_AUTOMATIC
-    
+
     def is_modality_manual(self):
         with self._lock_modality:
             return self._remote_mode == Data.MODE_REMOTE_MANUAL
-    
+
+    def get_dashboard_data(self):
+        with self._lock_dashboard_data:
+            return (self._last_sampling_time, self._last_water_level, self._last_state, self._last_valve_level)
+
     def set_state(self, state: str):
         with self._lock_state:
             self._state = state
-    
+
     def set_valve_level(self, valve_level):
         with self._lock_valve_level:
             self._valve_level = valve_level
-    
+
     def set_period(self, period):
         with self._lock_period:
             self._period = period
 
-    def set_automatic(self):
+    def set_automatic(self, address):
         with self._lock_modality:
-            if self._remote_mode == Data.MODE_AUTOMATIC:
+            if self._remote_mode == Data.MODE_AUTOMATIC or self._remote_address != address:
                 return False
             self._remote_mode = Data.MODE_AUTOMATIC
             self._remote_address = ""
@@ -104,6 +113,13 @@ class Data():
             self._remote_mode = Data.MODE_REMOTE_MANUAL
             self._remote_address = address
         return True
+
+    def set_dashboard_data(self, sampling_time, water_level, state, valve_level):
+        with self._lock_dashboard_data:
+            self._last_sampling_time = sampling_time
+            self._last_water_level = water_level
+            self._last_state = state
+            self._last_valve_level = valve_level
 
     def set_data(self, water_level: float):
         if (water_level < Data.WL1):

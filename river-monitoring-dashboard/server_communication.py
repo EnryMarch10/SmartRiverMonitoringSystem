@@ -1,5 +1,5 @@
-import sys, time, re, socket, threading
-from datetime import datetime
+import logging
+import sys, time, socket, threading
 
 connection = False
 
@@ -22,31 +22,35 @@ def _client_data(host):
     try:
         server.connect((host, port))
         while True:
-            received = server.recv(1024)
-            if received:
-                x = re.split("\\s", received.decode())
-                if len(x) == 2:
-                    if x[0] == "water_level":
-                        with water_levels_lock:
-                            water_times.append(datetime.now().strftime("%Y-%m-%d %I:%M:%S %p"))
-                            water_levels.append(x[1])
-                            if len(water_levels) > MAX_WATER_LEVELS:
-                                water_levels = water_levels[-MAX_WATER_LEVELS:]
-                                water_times = water_times[-MAX_WATER_LEVELS:]
-                    elif x[0] == "state":
-                        with state_lock:
-                            state = x[1]
-                    elif x[0] == "valve_level":
-                        with valve_level_lock:
-                            valve_level = x[1]
-            time.sleep(0.1) # simulates delay
+            data = server.recv(100)
+            if data:
+                message = data.decode()
+                first_space_index = message.find(' ')
+                last_space_index = message.rfind(' ')
+                if first_space_index != -1 and last_space_index != -1:
+                    if first_space_index != last_space_index:
+                        if message[:first_space_index] == "water_level":
+                            with water_levels_lock:
+                                water_times.append(message[first_space_index + 1:last_space_index])
+                                water_levels.append(message[last_space_index + 1:])
+                                if len(water_levels) > MAX_WATER_LEVELS:
+                                    water_levels = water_levels[-MAX_WATER_LEVELS:]
+                                    water_times = water_times[-MAX_WATER_LEVELS:]
+                    else:
+                        if message[:first_space_index] == "state":
+                            with state_lock:
+                                state = message[first_space_index + 1:]
+                        elif message[:first_space_index] == "valve_level":
+                            with valve_level_lock:
+                                valve_level = message[first_space_index + 1:]
+            # time.sleep(0.1) # simulates delay
     except Exception as e:
-        print(f"[TCPClientData] Failed with message: `{repr(e)}`", file=sys.stderr)
+        logging.info(f"[TCPClientData] Failed with message: `{repr(e)}`")
     finally:
         try:
             server.close()
         except Exception as e:
-            print(f"[TCPClientData] Failed to close connection with message: `{repr(e)}`", file=sys.stderr)
+            logging.error(f"[TCPClientData] Failed to close connection with message: `{repr(e)}`")
 
 def _connections_manager(host):
     global connection
@@ -59,7 +63,7 @@ def _connections_manager(host):
         if not t.is_alive():
             if connection:
                 connection = False
-            print("[ConnectionsManager] Thread data failed, trying to restart it...", file=sys.stderr)
+            logging.info("[ConnectionsManager] Thread data failed, trying to restart it...")
             t = threading.Thread(target=_client_data, args=(host,), daemon=True)
             t.start()
             time.sleep(3)

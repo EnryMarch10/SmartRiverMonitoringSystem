@@ -58,10 +58,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 if (elementStatus.innerText != new_state) {
                     elementStatus.innerText = new_state;
                 }
-                const elementWaterLevel = document.getElementById('valve-level').children[0]
-                if (elementWaterLevel.innerText != `${new_valve_level} %`) {
-                    elementWaterLevel.innerText = `${new_valve_level} %`;
+                // console.log(`new state = ${new_state}`)
+                const elementValveLevel = document.getElementById('valve-level').children[0]
+                if (elementValveLevel.innerText != `${new_valve_level} %`) {
+                    elementValveLevel.innerText = `${new_valve_level} %`;
                 }
+                // console.log(`new valve level = ${new_state}`)
 
                 // if (myChart.data.datasets[0].data.toString() !== new_water_levels.toString()) {
                 const dataPoints = new_water_times.map((x, index) => ({ x: x, y: new_water_levels[index] }));
