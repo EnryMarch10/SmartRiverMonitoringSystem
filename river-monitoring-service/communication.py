@@ -63,7 +63,7 @@ def _check_data():
                                 MyController.send_valve_percentage()
         else:
             time.sleep(disconnected)
-            disconnected = max(disconnected + 1, 30)
+            disconnected = min(disconnected + 1, 30)
         if not read_data:
             time.sleep(0.5)
 

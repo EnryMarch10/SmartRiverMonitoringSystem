@@ -25,7 +25,7 @@ class Controller:
             data = self._arduino.receive_data()
         if data is not None and data:
             logging.debug(f"[Controller] Water-Channel-Controller - Received message `{data[:-2]}`")
-            return data
+        return data
 
     def send_valve_percentage(self) -> bool:
         with self._lock_write:
