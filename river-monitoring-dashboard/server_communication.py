@@ -21,10 +21,11 @@ state = "UNKNOWN"
 valve_level = "UNKNOWN"
 
 def client_data(host):
-    global lock_water_levels, water_levels, water_times, lock_state, state, lock_valve_level, valve_level, lock_modality, id_manual, connection
+    global lock_water_levels, water_levels, water_times, lock_state, state, lock_valve_level, valve_level, lock_modality, id_manual
     port = 57134
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+    global connection
     try:
         server.connect((host, port))
         connection = True
@@ -120,7 +121,6 @@ def client_set_valve_level(host, addr, valve_level):
         return result
 
 def connections_manager(host):
-    global connection
     t = threading.Thread(target=client_data, args=(host,), daemon=True)
     t.start()
     time.sleep(2)

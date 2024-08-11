@@ -66,6 +66,7 @@ class Data():
         self._last_state = None
         self._last_valve_level = None
         self._last_modality = None
+        self._last_address = None
 
     def get_state(self):
         with self._lock_state:

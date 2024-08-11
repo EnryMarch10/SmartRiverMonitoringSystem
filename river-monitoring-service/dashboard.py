@@ -49,8 +49,8 @@ def server_data(client: socket.socket, address):
                     # It's possible that you have to increase the
                     # time in order to make it work
                     time.sleep(DELAY)
-                    if modality_address is None:
-                        modality_address = "UNKNOWN"
+                if modality_address is None:
+                    modality_address = "UNKNOWN"
                 sendMessage = f"mode {modality_address} {modality}"
                 logging.debug(f"[TCPServerData] Sending `{sendMessage}`")
                 client.sendall(str.encode(sendMessage))
@@ -59,8 +59,8 @@ def server_data(client: socket.socket, address):
             sent_valve_level = valve_level
             sent_modality = modality
             time.sleep(0.5)
-    except:
-        logging.warning("[TCPServerData] Client " + str(address) + " has disconnected")
+    except Exception as e:
+        logging.warning(f"[TCPServerData] Client {str(address)} has disconnected with message: `{repr(e)}`")
     finally:
         try:
             client.close()
@@ -87,8 +87,8 @@ def server_remote_modality(client: socket.socket, address):
                 logging.debug(f"[TCPServerModality] Water-Channel-Controller - Sent new modality")
                 MyController.send_modality()
             client.sendall(str.encode(response))
-    except:
-        logging.warning("[TCPServerModality] Client " + str(address) + " has disconnected")
+    except Exception as e:
+        logging.warning(f"[TCPServerModality] Client {str(address)} has disconnected with message: `{repr(e)}`")
     finally:
         try:
             client.close()
@@ -112,8 +112,8 @@ def server_remote_valve_level(client: socket.socket, address):
                 logging.debug(f"[TCPServerValveLevel] Water-Channel-Controller - Sent new valve level")
                 MyController.send_valve_percentage()
             client.sendall(str.encode(response))
-    except:
-        logging.warning("[TCPServerValveLevel] Client " + str(address) + " has disconnected")
+    except Exception as e:
+        logging.warning(f"[TCPServerValveLevel] Client {str(address)} has disconnected with message: `{repr(e)}`")
     finally:
         try:
             client.close()
