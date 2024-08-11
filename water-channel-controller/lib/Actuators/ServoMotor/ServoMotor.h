@@ -19,7 +19,6 @@ public:
     */
     void on(void) {
         pMotor->attach(pin);
-        // TODO: controlla se superfluo
         pMotor->write(DEFAULT_PULSE_WIDTH);
         init();
     }
