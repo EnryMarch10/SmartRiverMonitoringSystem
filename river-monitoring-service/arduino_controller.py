@@ -48,12 +48,12 @@ class ArduinoController:
         return self._arduino_uno.is_open
 
     def try_connect(self, port="", baud_rate=9600) -> bool:
-        if port == "":
+        if not port:
             ports = ports_finder.print_com_ports(COM_PORT_DESCRIPTION)
             if len(ports) > 0:
                 port = ports[0]
             else:
-                logging.error(f"[ArduinoUnoController] `{COM_PORT_DESCRIPTION}` not found in COM ports descriptions")
+                logging.warning(f"[ArduinoUnoController] `{COM_PORT_DESCRIPTION}` not found in COM ports descriptions")
                 return False
         try:
             if self._connected:
@@ -79,7 +79,6 @@ class ArduinoController:
             self._arduino_uno.write(
                 str.encode(f"{str.encode("".join(random.choice(string.ascii_letters + string.digits) for _ in range(8)),
                                          encoding='ascii')} {str(message)}\n", encoding='ascii'))
-            logging.info(f"[ArduinoUnoController] Message sent: `{message}`")
             result = True
         except Exception as e:
             logging.error(f"[ArduinoUnoController] Failed to send message with message: `{repr(e)}`")

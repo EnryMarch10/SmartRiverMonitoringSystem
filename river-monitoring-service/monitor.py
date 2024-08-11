@@ -24,10 +24,10 @@ def __on_connect(client: mqtt_client.Client, userdata, flags, rc, properties=Non
         logging.info(f"[MQTT] Connected successfully to broker `{BROKER}`")
         client.subscribe(TOPIC_WATER_LEVEL)
     else:
-        logging.error(f"[MQTT] Failed to connect to broker `{BROKER}`, return code `{rc}`")
+        logging.error(f"[MQTT] Failed to connect to broker `{BROKER}`, with result: `{mqtt_client.error_string(rc)}`")
 
 def __on_disconnect(client : mqtt_client.Client, userdata, rc, properties=None):
-    logging.error(f"[MQTT] Disconnected from broker `{BROKER}` with result code: `{mqtt_client.error_string(rc)}`")
+    logging.warning(f"[MQTT] Disconnected from broker `{BROKER}` with result: `{mqtt_client.error_string(rc)}`")
     reconnect_count, reconnect_delay = 0, FIRST_RECONNECT_DELAY
     while reconnect_count < MAX_RECONNECT_COUNT:
         logging.info(f"[MQTT] Reconnecting in `{reconnect_delay}` seconds...")
@@ -38,13 +38,15 @@ def __on_disconnect(client : mqtt_client.Client, userdata, rc, properties=None):
             logging.info(f"[MQTT] Reconnected with broker `{BROKER}` successfully!")
             return
         except Exception as err:
-            logging.info(f"[MQTT] `{err}`. Reconnect failed. Retrying...")
+            logging.warning(f"[MQTT] `{err}`. Reconnect failed. Retrying...")
 
         reconnect_delay *= RECONNECT_RATE
         reconnect_delay = min(reconnect_delay, MAX_RECONNECT_DELAY)
         reconnect_count += 1
     logging.error(f"[MQTT] Reconnect failed after `{reconnect_count}` attempts. Exiting...")
 
+# NOTE that I had to disable TLS for certificates problems with broker,
+# it could even be possible code bugs, check if it works disabling comments
 def connect_mqtt(on_message) -> mqtt_client.Client:
     client = mqtt_client.Client(client_id=CLIENT_ID, protocol=mqtt_client.MQTTv5)
     # client.tls_set(ca_certs='./broker.emqx.io-ca.crt')
@@ -66,7 +68,7 @@ def publish(client: mqtt_client.Client, msg: str) -> bool:
     result = client.publish(TOPIC_PERIOD, msg)
     status = result[0]
     if status == 0:
-        logging.info(f"[MQTT] Send `{msg}` to topic `{TOPIC_PERIOD}`")
+        logging.debug(f"[MQTT] Send `{msg}` to topic `{TOPIC_PERIOD}`")
         return True
     logging.error(f"[MQTT] Failed to send message to topic `{TOPIC_PERIOD}`")
     return False

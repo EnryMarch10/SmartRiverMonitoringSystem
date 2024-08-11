@@ -23,26 +23,26 @@ class Controller:
     def receive_data(self) -> str | None:
         with self._lock_read:
             data = self._arduino.receive_data()
-        if data is not None and data != "":
-            logging.info(f"[Water-Channel-Controller] Received message `{data[:-2]}`")
+        if data is not None and data:
+            logging.debug(f"[Controller] Water-Channel-Controller - Received message `{data[:-2]}`")
             return data
 
     def send_valve_percentage(self) -> bool:
         with self._lock_write:
             result = self._arduino.send_data(f"set valve percentage {MySharedData.get_valve_level()}")
         if result:
-            logging.info(f"[Water-Channel-Controller] Sent valve percentage `{MySharedData.get_valve_level()}`")
+            logging.debug(f"[Controller] Water-Channel-Controller - Sent valve percentage `{MySharedData.get_valve_level()}`")
         else:
-            logging.info(f"[Water-Channel-Controller] Failed to sent valve percentage `{MySharedData.get_valve_level()}`")
+            logging.debug(f"[Controller] Water-Channel-Controller - Failed to sent valve percentage `{MySharedData.get_valve_level()}`")
         return result
 
     def send_modality(self) -> bool:
         with self._lock_write:
             result = self._arduino.send_data(f"set mode {MySharedData.get_modality()}")
         if result:
-            logging.info(f"[Water-Channel-Controller] Sent modality `{MySharedData.get_modality()}`")
+            logging.debug(f"[Controller] Water-Channel-Controller - Sent modality `{MySharedData.get_modality()}`")
         else:
-            logging.info(f"[Water-Channel-Controller] Failed to sent modality `{MySharedData.get_modality()}`")
+            logging.debug(f"[Controller] Water-Channel-Controller - Failed to sent modality `{MySharedData.get_modality()}`")
         return result
 
 MyController = Controller()

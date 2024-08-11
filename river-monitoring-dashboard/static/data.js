@@ -19,14 +19,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         type: 'category',
                         title: {
                             display: true,
-                            text: 'Time (seconds could not be accurate)'
+                            text: 'Time (seconds may be inaccurate)'
                         }
                     },
                     y: {
                         title: {
                             display: true,
                             text: 'Water Level'
-                        }
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 30
                     }
                 }
             }
@@ -44,7 +46,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                         elementConnectionState.innerText = "CONNECTED"
                         elementConnectionState.style.color = "green"
                     }
-                } else if (elementConnectionState.innerText != "DISCONNECTED") { // connection == "ERROR"
+                } else if (elementConnectionState.innerText != "DISCONNECTED") {
                     elementConnectionState.innerText = "DISCONNECTED"
                     elementConnectionState.style.color = "red"
                 }
@@ -53,17 +55,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 const new_valve_level = newData.valve_level
                 const new_water_levels = newData.water_levels
                 const new_water_times = newData.water_times
+                const new_modality = newData.modality
+                const new_busy = newData.busy
 
                 const elementStatus = document.getElementById('system-status').children[0]
                 if (elementStatus.innerText != new_state) {
                     elementStatus.innerText = new_state;
                 }
-                // console.log(`new state = ${new_state}`)
                 const elementValveLevel = document.getElementById('valve-level').children[0]
                 if (elementValveLevel.innerText != `${new_valve_level} %`) {
                     elementValveLevel.innerText = `${new_valve_level} %`;
                 }
-                // console.log(`new valve level = ${new_state}`)
+                const currentModeLabel = document.getElementById('system-modality').children[0]
+                const manualForm = document.getElementById('manual-form')
+                if (currentModeLabel.innerText != new_modality) {
+                    if (currentModeLabel.innerText === 'AUTOMATIC') {
+                        currentModeLabel.innerText = 'MANUAL'
+                        manualForm.style.display = 'block'
+                    } else {
+                        currentModeLabel.innerText = 'AUTOMATIC'
+                        manualForm.style.display = 'none'
+                    }
+                }
+                const elementServerBusy = document.getElementById('busy').children[0]
+                if (elementServerBusy.innerText != new_busy) {
+                    elementServerBusy.innerText = new_busy;
+                }
 
                 // if (myChart.data.datasets[0].data.toString() !== new_water_levels.toString()) {
                 const dataPoints = new_water_times.map((x, index) => ({ x: x, y: new_water_levels[index] }));
@@ -79,8 +96,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         }
 
-        // TODO: understand if this is called in an async way
         fetchData()
-        setInterval(fetchData, 2500);  // Fetch new data every 5 seconds
+        setInterval(fetchData, 2500);
     })
 });
